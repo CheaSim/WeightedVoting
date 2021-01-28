@@ -1,5 +1,8 @@
 import torch
 import torch.nn as nn
+from torch.optim import AdamW
+import torch.nn.functional as F
+import pytorch_lightning as pl
 
 
 
@@ -19,6 +22,25 @@ class WeightedVoting(nn.Module):
         x = x * t_weight
         return x
     
+
+class WeightTrainer(pl.LightningModule):
+    def __init__(self, config):
+        super().__init__()
+        self.config = config
+        self.model = WeightedVoting(config)
+        self.loss_fct = F.cross_entropy()
+
+    def configure_optimizers(self):
+        return AdamW(self, lr=self.config["lr"])
+
+    def training_step(self, batch, batch_idx):
+        x, y = batch
+        y_hat = self.model(x)
+        loss = self.loss_fct(y_hat, y)
+
+        return {"loss": loss}
+
+
 inputs = torch.randint(1,5, size=(2,5,4)).float()
 a = WeightedVoting(5)
 
