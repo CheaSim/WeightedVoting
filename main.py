@@ -6,6 +6,7 @@ import pytorch_lightning as pl
 
 
 
+
 class WeightedVoting(nn.Module):
     def __init__(self, num_model=5):
         super().__init__()
