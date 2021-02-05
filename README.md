@@ -18,3 +18,10 @@ Firstly, use the train set to trian the model. Then, use the trained model to ev
 </center>
 
 首先使用几个模型针对验证集输出验证集上的概率分布，之后
+
+
+用户使用的时候，只需要import WeightedVoting，之后进行fit输入和输出，就可以得到每个模型的权重。
+
+过程中将train_set 分成两部分作为train和val。
+
+输入的train是一个[num_samples, num_models, num_choices + 1]
